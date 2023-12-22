@@ -1,6 +1,9 @@
-## Pipeline Folder
+## Kafka OpenSearch Pipeline
 
-The pipeline folder contains a gradle project with 4 classes:
+My contribution to an anomaly detection service project, full repo found [here](https://github.com/aminoa/log-anomalies) in the [pipeline](https://github.com/aminoa/log-anomalies/tree/main/pipeline) subfolder. This is a prototype pipeline in which a client's log files are sent to a Kafka cluster in order to decouple the log source from our intermediate datastore, largely removing any restrictions on the technology clients can use to produce and store their log files. The Kafka producer formats the client's log as a JSON string before compressing it and sending it to an [Upstash](https://upstash.com/) cluster. Producer messages are also batched to optimize throughput. The Kafka consumer then polls for the JSON string messages and creates an Open Search record for uploading to a [Bonsai](https://bonsai.io/) OpenSearch instance. This is also done in batches for further throughput improvement, and the Time field is indexed for query optimization. From the DB, the analytics team can access log files updated in realtime in order to produce their anomaly report. The pipeline design is highly scalable, resilient, and offers extremely flexible integration for diverse client log schema and sources.
+
+
+This repo contains a gradle project with 4 classes:
 [BonsaiConfig](#BonsaiConfig), [KafkaConfig](#KafkaConfig), [HealthAppProducer](#HealthAppProducer), and [HealthAppConsumer](#HealthAppConsumer). 
 The purpose of the project is to send health app log entries to a Kafka cluster
 using the HealthAppProducer class, and then process the messages
